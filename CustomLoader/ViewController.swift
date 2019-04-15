@@ -45,12 +45,9 @@ class ViewController: UIViewController {
 
     @objc func buttonPressed() {
         if isActive == false {
-            loader = CustomLoader()
-            loader.startLoader(view: view, boundsColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), sizeMultiplier: 2)
-            loader.setupSquare(view: view)
+            setupLoader()
             button.setTitle(LOADER_OFF, for: .normal)
             isActive = true
-            setupSquare()
         } else {
             loader.terminateLoader()
             button.setTitle(LOADER_ON, for: .normal)
@@ -59,8 +56,12 @@ class ViewController: UIViewController {
         }
     }
     
-    func setupSquare() {
-        print(loader.squareView.frame)
+    func setupLoader() {
+        loader = CustomLoader()
+        let x = Double((view.frame.width - 50) / 2)
+        let y = Double(view.frame.height / 3)
+        loader.setupLoader(forViewParent: view, frame_x: x, y: y, size: 50, boundsColor: nil)
+        loader.startLoader()
     }
 }
 
