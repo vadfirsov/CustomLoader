@@ -10,102 +10,139 @@ class CustomLoader {
     
     private var timer = Timer()
     
-    private var miniCircleView = UIView()
-    private var bigSquareView = UIView()
+    private let circleOne = UIView()
+    private let circleTwo = UIView()
+    let squareView = UIView()
     
-    private var miniCircleSize : Double = 12
-    private var bigSquareWidth : Double = 1
+    private var circleSize : Double = 12
+    private var squareBoundsWidth : Double = 1.2
     private var bigSquareSize : Double = 40
     
-    func startLoader(view : UIView, squareColor : CGColor, sizeMultiplier : Double?) {
-        
-        //GET RANDOM COLOR EVERY TIME ITS CALLED
-        var changingColor : UIColor {
+    //GET RANDOM COLOR EVERY TIME ITS CALLED
+    private var changingColor : UIColor {
             let someColor = UIColor(red: getComponant(), green: getComponant(), blue: getComponant(), alpha: 1.0)
             return someColor
-        }
-        
+    }
+ 
+    func startLoader(view : UIView, boundsColor : CGColor, sizeMultiplier : Double?) {
         //SETUP SIZES
         if sizeMultiplier != nil {
-            miniCircleSize = miniCircleSize * sizeMultiplier!
+            circleSize = circleSize * sizeMultiplier!
             bigSquareSize = bigSquareSize * sizeMultiplier!
-            bigSquareWidth = bigSquareWidth * sizeMultiplier!
+            squareBoundsWidth = squareBoundsWidth * sizeMultiplier!
         }
         
-        //SETUP BIG LOADING SQUARE
-        bigSquareView.translatesAutoresizingMaskIntoConstraints = false
-        bigSquareView.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
-        view.addSubview(bigSquareView)
-        
-        //SETUP SMALL CIRCLE
-        miniCircleView.translatesAutoresizingMaskIntoConstraints = false
-        miniCircleView.backgroundColor = #colorLiteral(red: 0.7305665612, green: 0.3118938208, blue: 0.9156422615, alpha: 1)
-        bigSquareView.addSubview(miniCircleView)
-        
+        //SETUP BIG LOADING SQUARE AND TWO SMALL CIRCLES
+        setupView(named: squareView, withParent: view, andColor: #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1))
+        setupView(named: circleOne, withParent: squareView, andColor: #colorLiteral(red: 0.7305665612, green: 0.3118938208, blue: 0.9156422615, alpha: 1))
+        setupView(named: circleTwo, withParent: squareView, andColor: #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1))
+        squareView.alpha = 0.0
         
         //MAKING THE BORDERS OF THE SQUARE
-        bigSquareView.layer.borderWidth = CGFloat(bigSquareWidth)
-        bigSquareView.layer.borderColor = squareColor
-        
-
+        squareView.layer.borderWidth = CGFloat(squareBoundsWidth)
+        squareView.layer.borderColor = boundsColor
         
         //CALCULATING THE BIG SQUARE FRAME INSIDE THE PARENT VIEW
-        bigSquareView.frame = CGRect(x: Double(view.frame.width / 2) - (bigSquareSize / 2),
+        squareView.frame = CGRect(x: Double(view.frame.width / 2) - (bigSquareSize / 2),
                                      y: Double(view.frame.height / 3),
                                      width: bigSquareSize,
                                      height: bigSquareSize)
         
-        //CALCULATING THE CIRCLE FRAME INSIDE THE SQUARE
-        miniCircleView.frame = CGRect(x: Double(bigSquareView.frame.width) - miniCircleSize - 3 - bigSquareWidth,
-                                      y: 3 + bigSquareWidth,
-                                      width: miniCircleSize,
-                                      height: miniCircleSize)
+        //POSITIONS OF THE CIRCLES IN THE FRAME
+        let left : Double = 3 + squareBoundsWidth
+        let top : Double = 3 + squareBoundsWidth
+        let right : Double = Double(squareView.frame.width) - circleSize - squareBoundsWidth - 3
+        let bottom : Double = Double(squareView.frame.height) - circleSize - squareBoundsWidth - 3
         
-        //MAKING THE CIRCLE VIEW ROUND
-        miniCircleView.layer.masksToBounds = false
-        miniCircleView.layer.cornerRadius = miniCircleView.frame.width / 2
+        //CALCULATING THE FIRST CIRCLE FRAME INSIDE THE SQUARE
+        circleOne.frame = CGRect(x: right, y: bottom, width: circleSize, height: circleSize)
+        
+        //CALCULATING THE SECOND CIRCLE FRAME INSIDE THE SQUARE
+        circleTwo.frame = CGRect(x: right, y: top, width: circleSize, height: circleSize)
+        
+        //MAKING CIRCLES OUT OF SQUARE VIEWS
+        makingCircleOutOff(circleOne, withChosenBorderColor: boundsColor)
+        makingCircleOutOff(circleTwo, withChosenBorderColor: boundsColor)
         
         //FIRST ROUND ROTATE FIXING DELAY
-        bigSquareView.rotate360Degrees(duration: 2, completionDelegate: nil)
-        UIView.animate(withDuration: 2.0) {
-            self.bigSquareView.backgroundColor = changingColor
-            self.miniCircleView.backgroundColor = changingColor
+        squareView.rotate360Degrees(duration: 1.5, completionDelegate: nil)
+        UIView.animate(withDuration: 1) {
+            weak var weakSelf = self //PREVENTS MEMORY LEAKS
+            weakSelf?.setColors()
         }
         
-        //MAKING THE SQUARE TO ROTATE 360 EACH 2 SEC
-        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
-            self.bigSquareView.rotate360Degrees(duration: 2, completionDelegate: nil)
-            UIView.animate(withDuration: 2, animations: {
-                self.bigSquareView.backgroundColor = changingColor
-                self.miniCircleView.backgroundColor = changingColor
+        UIView.animate(withDuration: 0.6) {
+            weak var weakSelf = self //PREVENTS MEMORY LEAKS
+            weakSelf?.squareView.alpha = 1.0
+        }
+        
+        //SQUARE ROTATION & COLOR CHANGE
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true, block: { (timer) in
+            self.squareView.rotate360Degrees(duration: 1.5, completionDelegate: nil)
+            UIView.animate(withDuration: 1, animations: {
+                weak var weakSelf = self //PREVENTS MEMORY LEAKS
+                weakSelf?.setColors()
             })
         })
-        
         
         //ANIMATING THE CIRCLE MOVEMENT INSIDE THE SQUARE
         UIView.animate(withDuration: 0.5) {
             UIView.setAnimationRepeatAutoreverses(true)
             UIView.setAnimationRepeatCount(.infinity)
-            self.miniCircleView.frame = CGRect(x: 3 + self.bigSquareWidth,
-                                               y:  3 + self.bigSquareWidth,
-                                               width: self.miniCircleSize,
-                                               height: self.miniCircleSize)
+            weak var weakSelf = self //PREVENTS MEMORY LEAKS
+            weakSelf?.circleOne.frame = CGRect(x: left, y:  top, width: weakSelf!.circleSize, height: weakSelf!.circleSize)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            UIView.animate(withDuration: 0.5) {
+                UIView.setAnimationRepeatAutoreverses(true)
+                UIView.setAnimationRepeatCount(.infinity)
+                weak var weakSelf = self //PREVENTS MEMORY LEAKS
+                weakSelf?.circleTwo.frame = CGRect(x: left, y: bottom, width: weakSelf!.circleSize, height: weakSelf!.circleSize)
+            }
         }
     }
-
     
-    func getComponant() -> CGFloat {
+    private func circleAnimation() {
+        
+    }
+    
+    private func makingCircleOutOff(_ view : UIView, withChosenBorderColor color : CGColor) {
+        view.layer.masksToBounds = false
+        view.layer.cornerRadius = circleTwo.frame.width / 2
+        view.layer.borderWidth = CGFloat(squareBoundsWidth)
+        view.layer.borderColor = color
+    }
+    
+    private func setupView(named view: UIView, withParent parentView : UIView, andColor color: UIColor) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = color
+        parentView.addSubview(view)
+    }
+    
+    private func setColors() {
+        squareView.backgroundColor = changingColor
+        circleOne.backgroundColor = changingColor
+        circleTwo.backgroundColor = changingColor
+    }
+    
+    private func getComponant() -> CGFloat {
         return CGFloat((arc4random() % 256)) / 255.0;
     }
     
     func terminateLoader() {
-        timer.invalidate()
-        bigSquareView.removeFromSuperview()
+        UIView.animate(withDuration: 0.6, animations: {
+            weak var weakSelf = self //PREVENTS MEMORY LEAKS
+            weakSelf?.squareView.alpha = 0.0
+        }) { (true) in
+            weak var weakSelf = self //PREVENTS MEMORY LEAKS
+            weakSelf?.timer.invalidate()
+            weakSelf?.squareView.removeFromSuperview()
+        }
     }
 }
 
 extension UIView {
-    
     func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0
@@ -115,7 +152,6 @@ extension UIView {
         if let delegate: AnyObject = completionDelegate {
             rotateAnimation.delegate = (delegate as! CAAnimationDelegate)
         }
-        self.layer.add(rotateAnimation, forKey: nil)
+        layer.add(rotateAnimation, forKey: nil)
     }
 }
-
