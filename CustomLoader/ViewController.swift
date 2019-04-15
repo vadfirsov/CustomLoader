@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         button.setTitle(LOADER_ON, for: .normal)
         button.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
         
-        button.frame = CGRect(x: (view.frame.width / 2) - 60, y: view.frame.height / 1.25, width: 120, height: 50)
+        button.frame = CGRect(x: (view.frame.width / 2) - 60, y: view.frame.height / 1.12, width: 120, height: 50)
         
         button.layer.borderWidth = 2.0
         button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -47,21 +47,32 @@ class ViewController: UIViewController {
         if isActive == false {
             setupLoader()
             button.setTitle(LOADER_OFF, for: .normal)
+            buttonFadingAnimation(alpha: 0.2)
             isActive = true
+
         } else {
             loader.terminateLoader()
             button.setTitle(LOADER_ON, for: .normal)
             isActive = false
+            buttonFadingAnimation(alpha: 1.0)
             loader = nil
+
         }
     }
     
     func setupLoader() {
         loader = CustomLoader()
-        let x = Double((view.frame.width - 50) / 2)
-        let y = Double(view.frame.height / 3)
-        loader.setupLoader(forViewParent: view, frame_x: x, y: y, size: 50, boundsColor: nil)
+        let x = Double((view.frame.width - 45) / 2)
+        let y = Double(view.frame.height / 1.25)
+        loader.setupLoader(forViewParent: view, frame_x: x, y: y, size: 45, boundsColor: nil)
         loader.startLoader()
+    }
+    
+    func buttonFadingAnimation(alpha : CGFloat) {
+        UIView.animate(withDuration: 1) {
+            weak var weakSelf = self
+            weakSelf?.button.alpha = alpha
+        }
     }
 }
 
