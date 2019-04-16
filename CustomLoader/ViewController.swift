@@ -47,7 +47,7 @@ class ViewController: UIViewController {
 
     @objc func buttonPressed() {
         if isActive == false {
-            setupLoader(loaderSize: 200)
+            setupLoader(loaderSize: 50)
             button.setTitle(LOADER_OFF, for: .normal)
             buttonFadingAnimation(alpha: 0.2)
             isActive = true
@@ -64,7 +64,7 @@ class ViewController: UIViewController {
     func setupLoader(loaderSize size: CGFloat) {
         loader = CustomLoader()
         let x = Double((view.frame.width - size) / 2)
-        let y = Double(view.frame.height / 2)
+        let y = Double(view.frame.height / 1.35)
         loader.setupLoader(forViewParent: view, frame_x: x, y: y, size: Double(size), boundsColor: nil)
         loader.startLoader()
     }
