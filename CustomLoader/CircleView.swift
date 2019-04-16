@@ -17,8 +17,6 @@ class CircleView : UIView {
         layer.cornerRadius = CGFloat(size / 2)
         layer.borderWidth = 1
         layer.borderColor = color
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

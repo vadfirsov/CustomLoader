@@ -10,9 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var someLoader: CustomLoader!
+    @IBOutlet weak var loaderFromStoryBoard: CustomLoader!
     
-    var loader : CustomLoader!
+    var loaderCreatedProgramatically : CustomLoader!
     var isActive = false
     
     var LOADER_ON = "LOADER ON"
@@ -22,18 +22,31 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)
+        loaderFromStoryBoard.startLoader()
+        view.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+//        setupButton()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         setupButton()
     }
+    
     
     func setupButton() {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
+        
+        view.addSubview(button)
+
         button.setTitle(LOADER_ON, for: .normal)
         button.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
-        
-        button.frame = CGRect(x: (view.frame.width / 2) - 60, y: view.frame.height / 1.12, width: 120, height: 50)
-        
+
+        button.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height / 1.2).isActive = true
+        button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 70).isActive = true
+        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:-70).isActive = true
+ 
+        button.layoutIfNeeded()
         button.layer.borderWidth = 2.0
         button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         button.layer.masksToBounds = false
@@ -41,8 +54,6 @@ class ViewController: UIViewController {
         button.clipsToBounds = true
         
         button.addTarget(self, action: #selector(buttonPressed), for: UIControl.Event.touchUpInside)
-        
-        view.addSubview(button)
     }
 
     @objc func buttonPressed() {
@@ -53,20 +64,21 @@ class ViewController: UIViewController {
             isActive = true
 
         } else {
-            loader.terminateLoader()
+            loaderCreatedProgramatically.terminateLoader()
             button.setTitle(LOADER_ON, for: .normal)
             isActive = false
             buttonFadingAnimation(alpha: 1.0)
-            loader = nil
+            loaderCreatedProgramatically = nil
         }
     }
     
     func setupLoader(loaderSize size: CGFloat) {
-        loader = CustomLoader()
+        loaderCreatedProgramatically = CustomLoader()
         let x = Double((view.frame.width - size) / 2)
-        let y = Double(view.frame.height / 1.35)
-        loader.setupLoader(forViewParent: view, frame_x: x, y: y, size: Double(size), boundsColor: nil)
-        loader.startLoader()
+        let y = Double(view.frame.height / 1.5)
+
+        loaderCreatedProgramatically.setupLoader(forViewParent: view, frame_x: x, y: y, size: Double(size), boundsColor: nil)
+        loaderCreatedProgramatically.startLoader()
     }
     
     func buttonFadingAnimation(alpha : CGFloat) {

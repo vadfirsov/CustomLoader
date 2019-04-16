@@ -24,6 +24,19 @@ class CustomLoader : UIView {
         return someColor
     }
     
+    //CCALED IF CREATED FROM NIB/STORYBOARD
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        alpha = 0
+        frame.size.width = frame.height //MAKE IT SQUARE
+        layer.borderWidth = 1.5
+        layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        UIView.animate(withDuration: 1.5) { //FADE IN ANIMATINO
+            weak var weakSelf = self //PEVENTS MEMORY LEAKS
+            weakSelf?.alpha = 1.0
+        }
+    }
+    
     //SETSUP THE LOADER IN PARENT VIEW
     func setupLoader(forViewParent view : UIView, frame_x x: Double, y : Double, size : Double, boundsColor : CGColor?) {       
         if boundsColor != nil {
