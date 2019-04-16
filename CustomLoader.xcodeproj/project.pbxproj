@@ -13,6 +13,7 @@
 		DA97B69522647A8A0099D977 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA97B69422647A8A0099D977 /* Assets.xcassets */; };
 		DA97B69822647A8A0099D977 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA97B69622647A8A0099D977 /* LaunchScreen.storyboard */; };
 		DA97B6A222647A9C0099D977 /* CustomLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA97B6A122647A9C0099D977 /* CustomLoader.swift */; };
+		DABC8EFD2265A31A005D28ED /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC8EFC2265A31A005D28ED /* CircleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		DA97B69722647A8A0099D977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DA97B69922647A8A0099D977 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA97B6A122647A9C0099D977 /* CustomLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLoader.swift; sourceTree = "<group>"; };
+		DABC8EFC2265A31A005D28ED /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				DA97B68D22647A890099D977 /* AppDelegate.swift */,
 				DA97B6A122647A9C0099D977 /* CustomLoader.swift */,
+				DABC8EFC2265A31A005D28ED /* CircleView.swift */,
 				DA97B68F22647A890099D977 /* ViewController.swift */,
 				DA97B69122647A890099D977 /* Main.storyboard */,
 				DA97B69422647A8A0099D977 /* Assets.xcassets */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABC8EFD2265A31A005D28ED /* CircleView.swift in Sources */,
 				DA97B69022647A890099D977 /* ViewController.swift in Sources */,
 				DA97B68E22647A890099D977 /* AppDelegate.swift in Sources */,
 				DA97B6A222647A9C0099D977 /* CustomLoader.swift in Sources */,
