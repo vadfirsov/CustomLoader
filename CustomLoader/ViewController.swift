@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var someLoader: CustomLoader!
+    
+    
     var loader : CustomLoader!
     var isActive = false
     
@@ -56,7 +59,6 @@ class ViewController: UIViewController {
             isActive = false
             buttonFadingAnimation(alpha: 1.0)
             loader = nil
-
         }
     }
     

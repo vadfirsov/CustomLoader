@@ -16,14 +16,15 @@ class CustomLoader : UIView {
     
     private var circleSize : Double = 12
     private var squareBoundsWidth : Double = 1.2
-    private var bigSquareSize : Double = 40
     
     private var boundsColor : CGColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     
+    
     //GET RANDOM COLOR EVERY TIME ITS CALLED
     private var changingColor : UIColor {
-            let someColor = UIColor(red: getComponant(), green: getComponant(), blue: getComponant(), alpha: 1.0)
-            return someColor
+        var ranComponent : CGFloat { return CGFloat((arc4random() % 256)) / 255.0; }
+        let someColor = UIColor(red: ranComponent, green: ranComponent, blue: ranComponent, alpha: 1.0)
+        return someColor
     }
     
     //SETSUP THE LOADER IN PARENT VIEW
@@ -91,6 +92,7 @@ class CustomLoader : UIView {
             weakSelf?.circleOne.frame = CGRect(x: left, y:  top, width: weakSelf!.circleSize, height: weakSelf!.circleSize)
         }
         
+        //ANIMATING SECOND CIRCLE WITH DELAY
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             UIView.animate(withDuration: 0.5) {
                 UIView.setAnimationRepeatAutoreverses(true)
@@ -101,6 +103,7 @@ class CustomLoader : UIView {
         }
     }
     
+    //MAKING THE CIRCLE CIRCLES WITH BORDERS
     private func makingCircleOutOff(_ view : UIView, withChosenBorderColor color : CGColor) {
         view.layer.masksToBounds = false
         view.layer.cornerRadius = circleTwo.frame.width / 2
@@ -120,10 +123,6 @@ class CustomLoader : UIView {
         circleTwo.backgroundColor = changingColor
     }
     
-    private func getComponant() -> CGFloat {
-        return CGFloat((arc4random() % 256)) / 255.0;
-    }
-    
     func terminateLoader() {
         UIView.animate(withDuration: 0.6, animations: {
             weak var weakSelf = self //PREVENTS MEMORY LEAKS
@@ -136,6 +135,7 @@ class CustomLoader : UIView {
     }
 }
 
+//UIVIEW FUNC EXTENTION TO MAKE THE UIVIEW ROTATE
 extension UIView {
     func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
